@@ -10,7 +10,7 @@ $$
 \min_{\rho_v \geq 0} \frac{1}{2}\|A\rho_v-b\|_2^2.
 $$
 
-Each row of $A$ represents a ray, and each column represents a voxel. Entries are ray lengths within voxels in meters. With $b$ in kg m$^{-2}$, the recovered density is in kg m$^{-3}$.
+Each row of $A$ represents a ray, and each column represents a voxel. Entries are ray lengths within voxels in meters. With $b$ in kg m⁻², the recovered density is in kg m⁻³.
 
 Here, **sparse** refers to the geometry matrix and its storage. The objective does not include a sparsity penalty, spatial smoothing, or other regularization. Nonnegativity alone does not guarantee a unique solution for an underdetermined system.
 
@@ -44,7 +44,7 @@ The caller supplies the geometry matrix and observations. This function does not
 | Input | Description |
 | --- | --- |
 | `A` | Real geometry matrix of size `nRays × nVoxels`, preferably sparse and double precision. Physical path lengths are nonnegative and expressed in meters. |
-| `b` | Real SIWV observations with `nRays` elements, in kg m^-2. Converted internally to a column vector. |
+| `b` | Real SIWV observations with `nRays` elements, in kg m⁻². Converted internally to a column vector. |
 | `opts` | Optional solver-options structure. Omit it or use `[]` to use the defaults. |
 
 `A` must have at least one row and one column. The function checks dimensions and rejects nonfinite entries in `A` and `b`. Supply real-valued data; the implementation is intended for physical tomography inputs.
@@ -63,13 +63,13 @@ Missing or empty numerical options use the defaults below.
 | `powerIterations` | `30` | Number of power iterations used to estimate the Lipschitz constant; positive integer. |
 | `lipschitzSafety` | `1.05` | Positive factor multiplying the Lipschitz estimate. |
 | `display` | `true` | Print solver progress and final diagnostics. Set to `false` for silent operation. |
-| `x0` | `[]` | Initial density vector with `nVoxels` finite entries, in kg m^-3 and in the column order of `A`. Empty means zero initialization. Negative values are clipped to zero. |
+| `x0` | `[]` | Initial density vector with `nVoxels` finite entries, in kg m⁻³ and in the column order of `A`. Empty means zero initialization. Negative values are clipped to zero. |
 
 ### Outputs
 
 | Output | Description |
 | --- | --- |
-| `rhov` | Nonnegative density column vector of size `nVoxels × 1`, in kg m^-3. |
+| `rhov` | Nonnegative density column vector of size `nVoxels × 1`, in kg m⁻³. |
 | `exitflag` | `1`: projected-gradient criterion satisfied. `0`: iteration limit reached without satisfying the criterion. Invalid inputs raise errors. |
 | `info` | Structure containing the solution vector, convergence diagnostics, and fit statistics. |
 
@@ -89,10 +89,10 @@ Missing or empty numerical options use the defaults below.
 | `nRestarts` | Number of momentum restarts. |
 | `columnScale` | Column norms, with zero norms replaced by `1`. |
 | `relativeChange` | `norm(z-zOld)/max(1,norm(zOld))` at the last convergence check; a diagnostic, not a stopping condition. |
-| `bFit` | Modeled observations, `A*rhovVector`, in kg m^-2. |
+| `bFit` | Modeled observations, `A*rhovVector`, in kg m⁻². |
 | `residual` | Observed minus modeled values: `b - bFit`. |
 | `residualNorm`, `residualNormSquared` | Euclidean residual norm and its square. |
-| `rmse`, `bias` | Root-mean-square residual and mean residual, in kg m^-2. Positive bias means the fitted observations are lower on average. |
+| `rmse`, `bias` | Root-mean-square residual and mean residual, in kg m⁻². Positive bias means the fitted observations are lower on average. |
 | `nnzA`, `matrixDensity` | Nonzero count and nonzero fraction of `A`; `matrixDensity` is a fraction, not a percentage. |
 | `nObservations`, `nVoxels` | Number of observations and voxels. |
 | `nUnobservedVoxels`, `unobservedVoxels` | Number and logical mask of zero columns in `A`. |
