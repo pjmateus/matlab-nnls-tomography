@@ -146,12 +146,12 @@ The function operates on `A` and `b` and does not inspect grid metadata. It can 
 
 The caller is responsible for constructing `A` consistently and retaining the mapping between columns and voxels. The solver does not reshape, interpolate, or reorder the solution. Any conversion to a spatial array must be performed separately using the original voxel numbering. 
 
-## Algorithm and convergence
+Algorithm and convergence
 
 For each column, the solver computes $s_j=\|A_{:,j}\|_2$, replacing zero norms with one. It then defines
 
 $$
-A_s=A\,\operatorname{diag}(1/s),\qquad z=\operatorname{diag}(s)\rho_v.
+A_s=A\,\mathrm{diag}(1/s),\qquad z=\mathrm{diag}(s)\rho_v.
 $$
 
 This change of variables preserves the least-squares problem and nonnegativity constraint. The iteration combines projected-gradient steps with FISTA momentum. Momentum is reset when `(y-zNew)'*(zNew-z) > 0`.
@@ -179,13 +179,13 @@ $$
 g=A_s^T(A_s z-b),\qquad p=z-\max(0,z-g),
 $$
 
-where the maximum is element-wise. Iteration stops successfully when
+where the maximum is elementwise. Iteration stops successfully when
 
 $$
 \|p\|_\infty\leq \texttt{tolerance}\,\max(1,\|A_s^T b\|_\infty).
 $$
 
-This is a scaled projected-gradient test in the normalized variables, with an absolute floor in the scale. It is not a relative residual test. By default, it is checked at iteration 1, every 10 iterations, and at the final permitted iteration, with a maximum of 5000 iterations.
+This is a scaled projected-gradient test in the normalized variables, with an absolute floor in the scale. It is not a relative residual test. By default it is checked at iteration 1, every 10 iterations, and at the final permitted iteration, with a maximum of 5000 iterations.
 
 In all experiments reported by the author to date, convergence was reached in fewer than 2000 iterations using the stated settings. This is an empirical observation for those experiments, not a universal iteration bound.
 
